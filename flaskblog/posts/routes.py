@@ -19,7 +19,7 @@ from flask import jsonify
 posts = Blueprint('posts', __name__)
 
 @posts.route("/post/new", methods=['POST'])
-@login_required
+# @login_required
 def new_post():
     title = request.form.get('title')
     content = request.form.get('content')
@@ -34,8 +34,8 @@ def new_post():
         uploaded_file_url = save_picture(media)  # Make sure save_picture returns a URL or file path
 
     post = Post(title=title, content=content, author=current_user, media=uploaded_file_url)
-    db.session.add(post)
-    db.session.commit()
+    # db.session.add(post)
+    # db.session.commit()
 
     return jsonify({'message': 'Your post has been created!', 'post': {
         'title': post.title,
