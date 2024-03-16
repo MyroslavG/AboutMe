@@ -17,7 +17,6 @@ def register():
         return jsonify({'message': 'User already logged in'}), 403
 
     data = request.json
-    print(data)
     username = data.get('username')
     email = data.get('email')
     password = data.get('password')
@@ -25,8 +24,8 @@ def register():
 
     hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     user = User(username=username, email=email, password=hashed_password)
-    db.session.add(user)
-    db.session.commit()
+    # db.session.add(user)
+    # db.session.commit()
     return jsonify({'message': 'Account created successfully'}), 201
 
 @users.route("/login", methods=['POST'])    
