@@ -21,9 +21,10 @@ posts = Blueprint('posts', __name__)
 @posts.route("/post/new", methods=['POST'])
 # @login_required
 def new_post():
-    title = request.form.get('title')
-    content = request.form.get('content')
-    media = request.files.get('media')  # Get the file from the request
+    data = request.json
+    title = data.get('title')
+    content = data.get('content')
+    media = data.get('media')  # Get the file from the request
 
     if not title or not content:
         return jsonify({'message': 'Missing title or content'}), 400
