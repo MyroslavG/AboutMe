@@ -15,10 +15,10 @@ app = Flask(__name__)
 # CORS(app)
 load_dotenv()
 
-app.config['SECRET_KEY'] = "38847e147d716783d82904179bcd7aac"
-app.config['JWT_SECRET_KEY'] = "9332rhhf42h94r8y32741"
-# app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-# app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
+# app.config['SECRET_KEY'] = "38847e147d716783d82904179bcd7aac"
+# app.config['JWT_SECRET_KEY'] = "9332rhhf42h94r8y32741"
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
