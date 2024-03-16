@@ -38,13 +38,17 @@ def login():
     email = data.get('email')
     password = data.get('password')
 
-    user = User.query.filter_by(email=email).first()
-    if user and bcrypt.check_password_hash(user.password, password):
-        login_user(user, remember=True)
-        access_token = create_access_token(identity=email)
-        return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username}), 200
-    else:    
-        return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
+    login_user(user, remember=True)
+    access_token = create_access_token(identity=email)
+    return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username}), 200
+
+    # user = User.query.filter_by(email=email).first()
+    # if user and bcrypt.check_password_hash(user.password, password):
+    #     login_user(user, remember=True)
+    #     access_token = create_access_token(identity=email)
+    #     return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username}), 200
+    # else:    
+    #     return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
     
 
 @users.route("/logout")   
