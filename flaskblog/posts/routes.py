@@ -39,9 +39,9 @@ def new_post():
     # db.session.commit()
 
     return jsonify({'message': 'Your post has been created!', 'post': {
-        'title': post.title,
-        'content': post.content,
-        'media': post.media,
+        'title': title,
+        'content': content,
+        # 'media': media,
     }}), 201
 
 
