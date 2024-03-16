@@ -40,7 +40,7 @@ def login():
 
     # login_user(user, remember=True)
     access_token = create_access_token(identity=email)
-    return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username}), 200
+    return jsonify({'message': 'Login successful'}), 200 
 
     # user = User.query.filter_by(email=email).first()
     # if user and bcrypt.check_password_hash(user.password, password):
