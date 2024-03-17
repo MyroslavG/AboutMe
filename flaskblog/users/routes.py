@@ -27,7 +27,8 @@ def register():
     access_token = create_access_token(identity=email)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'message': 'Account created successfully', 'access_token': access_token, 'username': user.username}), 201
+    login_user(user, remember=True)
+    return jsonify({'message': 'Account created successfully', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 201
 
 @users.route("/login", methods=['POST'])    
 def login():
@@ -42,9 +43,9 @@ def login():
     # if user and password == user.password:
         
     if user and bcrypt.check_password_hash(user.password, password):
-        # login_user(user, remember=True)
+        login_user(user, remember=True)
         access_token = create_access_token(identity=email)
-        return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username}), 200
+        return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 200
     else:    
         return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
     

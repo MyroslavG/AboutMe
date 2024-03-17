@@ -19,30 +19,50 @@ from flask import jsonify
 posts = Blueprint('posts', __name__)
 
 @posts.route("/post/new", methods=['POST'])
-# @login_required
+@login_required
 def new_post():
     data = request.json
     title = data.get('title')
     content = data.get('content')
-    media = data.get('media')  # Get the file from the request
+    # media = data.get('media')  # Get the file from the request
 
     if not title or not content:
         return jsonify({'message': 'Missing title or content'}), 400
 
-    uploaded_file_url = None
-    if media:
-        filename = secure_filename(media.filename)
-        uploaded_file_url = save_picture(media)  # Make sure save_picture returns a URL or file path
+    # uploaded_file_url = None
+    # if media:
+    #     filename = secure_filename(media.filename)
+    #     uploaded_file_url = save_picture(media)  # Make sure save_picture returns a URL or file path
 
-    # post = Post(title=title, content=content, author=current_user, media=uploaded_file_url)
-    # db.session.add(post)
-    # db.session.commit()
+    post = Post(title=title, content=content, author=current_user, media=uploaded_file_url)
+    db.session.add(post)
+    db.session.commit()
 
     return jsonify({'message': 'Your post has been created!', 'post': {
         'title': title,
         'content': content,
         # 'media': media,
     }}), 201
+
+@posts.route("/posts/<int:user_id>", methods=['GET', 'POST'])
+def user_posts(user_id):
+    user = User.query.get_or_404(user_id)
+    page = request.args.get('page', 1, type=int)
+    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+
+    # Convert posts and pagination data to JSON serializable format
+    posts_data = [{
+        'title': post.title,
+        'content': post.content,
+        'date_posted': post.date_posted.isoformat(),
+        # Add any other necessary post fields here
+    } for post in posts.items]
+
+    return jsonify({
+        'posts': posts_data,
+        'total_pages': posts.pages,
+        'current_page': posts.page
+    })
 
 
 @posts.route("/post/<int:post_id>", methods=['GET', 'POST'])  
