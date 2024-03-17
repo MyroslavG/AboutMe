@@ -22,7 +22,7 @@ def register():
     password = data.get('password')
     # You'd validate data here
 
-    hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+    # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     user = User(username=username, email=email, password=hashed_password)
     access_token = create_access_token(identity=email)
     db.session.add(user)
@@ -40,9 +40,9 @@ def login():
     password = data.get('password')
 
     user = User.query.filter_by(email=email).first()
-    # if user and password == user.password:
+    if user and password == user.password:
         
-    if user and bcrypt.check_password_hash(user.password, password):
+    # if user and bcrypt.check_password_hash(user.password, password):
         # login_user(user, remember=True)
         access_token = create_access_token(identity=email)
         return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 200
