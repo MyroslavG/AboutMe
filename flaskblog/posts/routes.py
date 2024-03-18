@@ -107,7 +107,7 @@ def delete_post(post_id):
 #     })
 
 
-@app.route("/posts/<int:user_id>", methods=['GET'])
+@posts.route("/posts/<int:user_id>", methods=['GET'])
 def user_posts(user_id):
     user = User.query.get_or_404(user_id)
     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).all()
