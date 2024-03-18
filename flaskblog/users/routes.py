@@ -58,7 +58,7 @@ def users_page(user_id):
     return render_template('user_page.html', user=user, posts=posts)
 
 @users.route("/phone/<int:user_id>", methods=['PUT'])
-def add_phone(phone, user_id):
+def add_phone(user_id):
     data = request.json
     phone = data.get('phone')
 
