@@ -57,7 +57,7 @@ def users_page(user_id):
     posts = Post.query.filter_by(author=user).all()
     return render_template('user_page.html', user=user, posts=posts)
 
-@users.route("/phone/<int:user_id>", methods=['GET', 'POST'])
+@users.route("/phone/<int:user_id>", methods=['PUT'])
 def add_phone(phone, user_id):
     data = request.json
     phone = data.get('phone')
