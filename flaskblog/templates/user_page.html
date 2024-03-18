@@ -55,13 +55,14 @@
             <p>Email: {{ user.email }}</p>
         </div>
 
-        <h2>Posts</h2>
+        <h2>Items</h2>
         {% if posts %}
             <ul>
             {% for post in posts %}
                 <li>
                     <h3>{{ post.title }}</h3>
-                    <p>{{ post.content }}</p>
+                    <!-- Add a class to post content for easy JavaScript targeting -->
+                    <p class="post-content">{{ post.content }}</p>
                 </li>
             {% endfor %}
             </ul>
@@ -69,5 +70,16 @@
             <p>This user has no posts.</p>
         {% endif %}
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('.post-content').forEach(function(node) {
+                // Simple URL detection pattern (improve as needed)
+                const urlPattern = /(https?:\/\/[^\s]+)/g;
+                node.innerHTML = node.textContent.replace(urlPattern, function(url) {
+                    return `<a href="${url}" target="_blank">${url}</a>`;
+                });
+            });
+        });
+    </script>
 </body>
 </html>
