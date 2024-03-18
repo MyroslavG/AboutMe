@@ -7,7 +7,7 @@ from flaskblog.users.forms import (RegistrationForm, LoginForm, UpdateAccountFor
 from flaskblog.users.utils import save_picture, send_reset_email
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import and_
-# from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token
 
 users = Blueprint('users', __name__)
 
@@ -24,7 +24,7 @@ def register():
 
     # hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
     user = User(username=username, email=email, password=hashed_password)
-    # access_token = create_access_token(identity=email)
+    access_token = create_access_token(identity=email)
     db.session.add(user)
     db.session.commit()
     # login_user(user, remember=True)
@@ -44,7 +44,7 @@ def login():
         
     # if user and bcrypt.check_password_hash(user.password, password):
         # login_user(user, remember=True)
-        # access_token = create_access_token(identity=email)
+        access_token = create_access_token(identity=email)
         return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 200
     else:    
         return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
