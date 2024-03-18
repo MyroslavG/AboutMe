@@ -42,7 +42,7 @@ def new_post(user_id):
         # 'media': media,
     }}), 201
 
-@posts.route("/post/edit/<int:post_id>", methods=['PUT'])
+@posts.route("/post/edit/<int:post_id>", methods=['POST'])
 # @login_required
 def edit_post(post_id):
     data = request.get_json()
@@ -71,7 +71,7 @@ def edit_post(post_id):
         'content': post.content,
     }}), 200
 
-@posts.route("/post/delete/<int:post_id>", methods=['DELETE'])
+@posts.route("/post/delete/<int:post_id>", methods=['POST'])
 # @login_required
 def delete_post(post_id):
     post = Post.query.get(post_id)
