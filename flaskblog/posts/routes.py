@@ -85,26 +85,43 @@ def delete_post(post_id):
     return jsonify({'message': 'Your post has been deleted'}), 200
 
 
-@posts.route("/posts/<int:user_id>", methods=['GET'])
+# @posts.route("/posts/<int:user_id>", methods=['GET'])
+# def user_posts(user_id):
+#     user = User.query.get_or_404(user_id)
+#     page = request.args.get('page', 1, type=int)
+#     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc())
+
+#     # Convert posts and pagination data to JSON serializable format
+#     posts_data = [{
+#         'id': post.id,
+#         'title': post.title,
+#         'content': post.content,
+#         'date_posted': post.date_posted.isoformat(),
+#         # Add any other necessary post fields here
+#     } for post in posts.items]
+
+#     return jsonify({
+#         'posts': posts_data,
+#         'total_pages': posts.pages,
+#         'current_page': posts.page
+#     })
+
+
+@app.route("/posts/<int:user_id>", methods=['GET'])
 def user_posts(user_id):
     user = User.query.get_or_404(user_id)
-    page = request.args.get('page', 1, type=int)
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc())
+    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).all()
 
-    # Convert posts and pagination data to JSON serializable format
     posts_data = [{
         'id': post.id,
         'title': post.title,
         'content': post.content,
         'date_posted': post.date_posted.isoformat(),
         # Add any other necessary post fields here
-    } for post in posts.items]
+    } for post in posts]
 
-    return jsonify({
-        'posts': posts_data,
-        'total_pages': posts.pages,
-        'current_page': posts.page
-    })
+    return jsonify({'posts': posts_data})
+
 
 
 
