@@ -34,7 +34,7 @@ def new_post():
     #     filename = secure_filename(media.filename)
     #     uploaded_file_url = save_picture(media)  # Make sure save_picture returns a URL or file path
 
-    post = Post(title=title, content=content, author=current_user, media=uploaded_file_url)
+    post = Post(title=title, content=content, author=current_user)
     db.session.add(post)
     db.session.commit()
 
