@@ -10,6 +10,7 @@
             padding: 0;
             background-color: #f4f4f4;
             color: #333;
+            text-align: center; /* Center align text */
         }
         .container {
             max-width: 800px;
@@ -17,6 +18,7 @@
             padding: 20px;
             background-color: #fff;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 10px; /* Add border-radius */
         }
         h1, h2 {
             color: #007bff;
@@ -26,23 +28,32 @@
             padding: 0;
         }
         ul li {
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
+            margin-bottom: 20px; /* Increase bottom margin */
+            padding: 20px; /* Add padding */
+            border: 1px solid #eee; /* Change to full border */
+            border-radius: 5px; /* Add border-radius */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Add subtle shadow */
+            text-align: left; /* Align text to left */
         }
         ul li h3 {
             margin-top: 0;
             color: #333;
+            font-size: 24px; /* Increase font size */
         }
         p {
             margin: 10px 0;
+        }
+        .user-info {
+            margin-bottom: 30px; /* Add margin below user info */
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>{{ user.username }}</h1>
-        <p>Email: {{ user.email }}</p>
+        <div class="user-info">
+            <h1>{{ user.username }}</h1>
+            <p>Email: {{ user.email }}</p>
+        </div>
 
         <h2>Posts</h2>
         {% if posts %}
