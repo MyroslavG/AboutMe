@@ -54,7 +54,8 @@ def users_page(user_id):
     user = User.query.get(user_id)
     if not user:
         abort(404)  # Return a 404 Not Found if the user doesn't exist
-    return render_template('user_page.html', user=user)
+    posts = Post.query.filter_by(author=user).all()
+    return render_template('user_page.html', user=user, posts=posts)
 
     
 

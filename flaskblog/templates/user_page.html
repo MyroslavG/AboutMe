@@ -3,10 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <title>User Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #007bff;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        ul li h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        p {
+            margin: 10px 0;
+        }
+    </style>
 </head>
 <body>
-    <h1>{{ user.username }}</h1>
-    <p>Email: {{ user.email }}</p>
-    <!-- Display more user information as needed -->
+    <div class="container">
+        <h1>{{ user.username }}</h1>
+        <p>Email: {{ user.email }}</p>
+
+        <h2>Posts</h2>
+        {% if posts %}
+            <ul>
+            {% for post in posts %}
+                <li>
+                    <h3>{{ post.title }}</h3>
+                    <p>{{ post.content }}</p>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>This user has no posts.</p>
+        {% endif %}
+    </div>
 </body>
 </html>
