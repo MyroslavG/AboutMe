@@ -42,6 +42,49 @@ def new_post(user_id):
         # 'media': media,
     }}), 201
 
+@app.route("/post/edit/<int:post_id>", methods=['PUT'])
+# @login_required
+def edit_post(post_id):
+    data = request.get_json()
+
+    if not data:
+        return jsonify({'message': 'No JSON data provided'}), 400
+
+    post = Post.query.get(post_id)
+    if not post:
+        return jsonify({'message': 'Post not found'}), 404
+
+    title = data.get('title')
+    content = data.get('content')
+
+    if not title or not content:
+        return jsonify({'message': 'Missing title or content'}), 400
+
+    # Additional authorization checks could be performed here
+    post.title = title
+    post.content = content
+    db.session.commit()
+
+    return jsonify({'message': 'Your post has been updated!', 'post': {
+        'id': post.id,
+        'title': post.title,
+        'content': post.content,
+    }}), 200
+
+@app.route("/post/delete/<int:post_id>", methods=['DELETE'])
+# @login_required
+def delete_post(post_id):
+    post = Post.query.get(post_id)
+    if not post:
+        return jsonify({'message': 'Post not found'}), 404
+
+    # Additional authorization checks could be performed here
+    db.session.delete(post)
+    db.session.commit()
+
+    return jsonify({'message': 'Your post has been deleted'}), 200
+
+
 @posts.route("/posts/<int:user_id>", methods=['GET'])
 def user_posts(user_id):
     user = User.query.get_or_404(user_id)
@@ -50,6 +93,7 @@ def user_posts(user_id):
 
     # Convert posts and pagination data to JSON serializable format
     posts_data = [{
+        'id': post.id,
         'title': post.title,
         'content': post.content,
         'date_posted': post.date_posted.isoformat(),
