@@ -19,7 +19,7 @@ from flask import jsonify
 posts = Blueprint('posts', __name__)
 
 @posts.route("/post/new", methods=['POST'])
-@login_required
+# @login_required
 def new_post():
     data = request.json
     title = data.get('title')
@@ -44,7 +44,7 @@ def new_post():
         # 'media': media,
     }}), 201
 
-@posts.route("/posts/<int:user_id>", methods=['GET', 'POST'])
+@posts.route("/posts/<int:user_id>", methods=['GET'])
 def user_posts(user_id):
     user = User.query.get_or_404(user_id)
     page = request.args.get('page', 1, type=int)
