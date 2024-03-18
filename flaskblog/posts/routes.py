@@ -20,7 +20,7 @@ posts = Blueprint('posts', __name__)
 
 @posts.route("/post/<int:user_id>", methods=['POST'])
 # @login_required
-def new_post():
+def new_post(user_id):
     data = request.json
     title = data.get('title')
     content = data.get('content')
