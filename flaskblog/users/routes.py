@@ -59,7 +59,7 @@ def users_page(user_id):
 
 @users.route("/phone/<int:user_id>", methods=['GET', 'POST'])
 def add_phone(phone, user_id):
-    data = request.get_json()
+    data = request.json
     phone = data.get('phone')
 
     user = User.query.filter_by(id=user_id).first()
