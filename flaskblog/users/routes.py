@@ -59,13 +59,18 @@ def users_page(user_id):
 
 @users.route("/phone/<int:user_id>", methods=['GET', 'POST'])
 def add_phone(phone, user_id):
+    data = request.get_json()
+    phone = data.get('phone')
+
     user = User.query.filter_by(id=user_id).first()
-    if user:
+    if user and phone:
         user.phone = phone
         db.session.commit()
         return jsonify({'message': 'Phone number added successfully'}), 200
+    elif not phone:
+        return jsonify({'message': 'Phone number is missing'}), 400
     else:
-        return jsonify({'message': "User with this id doesn't exist"}), 401
+        return jsonify({'message': "User with this id doesn't exist"}), 404
     
 
 # @users.route("/logout")   
