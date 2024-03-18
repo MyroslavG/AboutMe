@@ -89,7 +89,7 @@ def delete_post(post_id):
 def user_posts(user_id):
     user = User.query.get_or_404(user_id)
     page = request.args.get('page', 1, type=int)
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc())
 
     # Convert posts and pagination data to JSON serializable format
     posts_data = [{
