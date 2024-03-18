@@ -21,18 +21,16 @@ posts = Blueprint('posts', __name__)
 @posts.route("/post/<int:user_id>", methods=['POST'])
 # @login_required
 def new_post(user_id):
-    data = request.json
+    data = request.get_json()  # This ensures you get the JSON data as a dictionary
+
+    if not data:
+        return jsonify({'message': 'No JSON data provided'}), 400
+
     title = data.get('title')
     content = data.get('content')
-    # media = data.get('media')  # Get the file from the request
 
     if not title or not content:
         return jsonify({'message': 'Missing title or content'}), 400
-
-    # uploaded_file_url = None
-    # if media:
-    #     filename = secure_filename(media.filename)
-    #     uploaded_file_url = save_picture(media)  # Make sure save_picture returns a URL or file path
 
     post = Post(title=title, content=content, user_id=user_id)
     db.session.add(post)
@@ -65,10 +63,12 @@ def user_posts(user_id):
     })
 
 
-@posts.route("/post/<int:post_id>", methods=['GET', 'POST'])  
-def post(post_id):
-    post = Post.query.get_or_404(post_id)
-    return render_template('post.html', title=post.title, post=post, legend='NEW POST')    
+
+
+# @posts.route("/post/<int:post_id>", methods=['GET', 'POST'])  
+# def post(post_id):
+#     post = Post.query.get_or_404(post_id)
+#     return render_template('post.html', title=post.title, post=post, legend='NEW POST')    
 
 # @posts.route("/post/<int:post_id>/update", methods=['GET', 'POST'])  
 # @login_required
