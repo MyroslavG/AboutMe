@@ -7,7 +7,7 @@ from flaskblog.users.forms import (RegistrationForm, LoginForm, UpdateAccountFor
 from flaskblog.users.utils import save_picture, send_reset_email
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import and_
-from flask_jwt_extended import create_access_token
+# from flask_jwt_extended import create_access_token
 
 users = Blueprint('users', __name__)
 
@@ -57,6 +57,15 @@ def users_page(user_id):
     posts = Post.query.filter_by(author=user).all()
     return render_template('user_page.html', user=user, posts=posts)
 
+@users.route("/phone/<int:user_id>", methods=['GET', 'POST'])
+def add_phone(phone, user_id):
+    user = User.query.filter_by(id=user_id).first()
+    if user:
+        user.phone = phone
+        db.session.commit()
+        return jsonify({'message': 'Phone number added successfully'}), 200
+    else:
+        return jsonify({'message': "User with this id doesn't exist"}), 401
     
 
 # @users.route("/logout")   
