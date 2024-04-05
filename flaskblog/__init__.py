@@ -7,6 +7,7 @@ from flask_mail import Mail
 from flask_migrate import Migrate
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager, create_access_token
+import openai
 # from flask_cors import CORS
 #from flaskblog.posts.s3_utils import upload_to_s3
 #from flask_socketio import SocketIO
