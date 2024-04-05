@@ -15,6 +15,8 @@ import io
 
 users = Blueprint('users', __name__)
 
+openai.api_key = os.getenv('OPENAI_SECRET')
+
 @users.route("/register", methods=['POST'])    
 def register():
     if current_user.is_authenticated:
