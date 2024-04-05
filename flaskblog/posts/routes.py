@@ -84,7 +84,6 @@ def delete_post(post_id):
 
     return jsonify({'message': 'Your post has been deleted'}), 200
 
-
 # @posts.route("/posts/<int:user_id>", methods=['GET'])
 # def user_posts(user_id):
 #     user = User.query.get_or_404(user_id)

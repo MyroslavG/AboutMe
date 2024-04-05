@@ -72,6 +72,39 @@ def add_phone(user_id):
     else:
         return jsonify({'message': "User with this id doesn't exist"}), 404
     
+@users.route("/generate_resume/<int:user_id>", methods=['GET'])
+def generate_resume(user_id):
+    user = User.query.get_or_404(user_id)
+    user_posts = Post.query.filter_by(author=user).all()
+
+    chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
+
+    response = openai.Completion.create(
+      engine="text-davinci-003", 
+      prompt=chatgpt_prompt,
+      temperature=0.7,
+      max_tokens=2048
+    )
+    resume_text = response.choices[0].text.strip()
+
+    pdf_buffer = io.BytesIO()
+    c = canvas.Canvas(pdf_buffer, pagesize=letter)
+    text_object = c.beginText(40, 750)
+    text_object.setFont("Helvetica", 11)
+    
+    # Adding the resume text to PDF
+    for line in resume_text.split('\n'):
+        text_object.textLine(line)
+    
+    c.drawText(text_object)
+    c.showPage()
+    c.save()
+    
+    pdf_buffer.seek(0)
+    
+    return send_file(pdf_buffer, as_attachment=True, attachment_filename='resume.pdf')
+
+    # return jsonify({'message': 'Resume generated successfully'})
 
 # @users.route("/logout")   
 # def logout():

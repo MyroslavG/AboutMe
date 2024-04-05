@@ -23,6 +23,9 @@ app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET_KEY')
 S3_BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
+
+openai.api_key = os.getenv('OPENAI_SECRET')
+
 #s3 = boto3.client('s3', aws_access_key_id=AWS_ACCESS_KEY, aws_secret_access_key=AWS_SECRET_KEY)
 app.config['UPLOAD_FOLDER'] = os.getenv('UPLOAD_FOLDER')
 
