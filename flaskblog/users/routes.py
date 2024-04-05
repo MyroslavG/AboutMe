@@ -1,4 +1,4 @@
-from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify
+from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify, send_file
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog import db, bcrypt
 from flaskblog.models import User, Post
@@ -8,6 +8,10 @@ from flaskblog.users.utils import save_picture, send_reset_email
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import and_
 from flask_jwt_extended import create_access_token
+from reportlab.lib.pagesizes import letter
+from reportlab.pdfgen import canvas
+import openai
+import io
 
 users = Blueprint('users', __name__)
 
