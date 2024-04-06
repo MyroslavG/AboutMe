@@ -90,7 +90,7 @@ def generate_resume(user_id):
         model="gpt-3.5-turbo",  # Adjust the model as needed
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": chatgpt_prompt}
         ]
     )
     
