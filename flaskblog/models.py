@@ -25,6 +25,7 @@ class User(db.Model, UserMixin):
     bio = db.Column(db.String(350))
     posts = db.relationship('Post', backref = 'author', lazy = True)
     date_registered = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
+    pdf_url = db.Column(db.String(200))
     subscribers = db.relationship('Subscription', foreign_keys=[Subscription.subscribed_to_id], backref=db.backref('subscriber'))
     subscribed_to = db.relationship('Subscription', foreign_keys=[Subscription.subscriber_id], backref=db.backref('subscribed_to'))
 

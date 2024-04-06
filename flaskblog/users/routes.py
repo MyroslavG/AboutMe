@@ -7,12 +7,14 @@ from flaskblog.users.forms import (RegistrationForm, LoginForm, UpdateAccountFor
 from flaskblog.users.utils import save_picture, send_reset_email
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import and_
-from flask_jwt_extended import create_access_token
+# from flask_jwt_extended import create_access_token
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from openai import OpenAI
 import io
 import os
+import boto3
+# from s3_utils import upload_to_s3
 
 users = Blueprint('users', __name__)
 
@@ -86,7 +88,7 @@ def generate_resume(user_id):
     user_posts = Post.query.filter_by(author=user).all()
 
     chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
-    print(chatgpt_prompt)
+    # print(chatgpt_prompt)
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Adjust the model as needed
@@ -112,8 +114,16 @@ def generate_resume(user_id):
     c.save()
     
     pdf_buffer.seek(0)
+
+    s3 = boto3.client('s3')
+    pdf_key = f'resume{user.id}.pdf'
+    s3.upload_fileobj(pdf_buffer, S3_BUCKET_NAME, pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
+
+    pdf_url = f'https://{bucket_name}.s3.amazonaws.com/{pdf_key}'
+
+    return jsonify({'pdf_url': pdf_url})
     
-    return send_file(pdf_buffer, as_attachment=True, download_name='resume.pdf')
+    # return send_file(pdf_buffer, as_attachment=True, download_name='resume.pdf')
 
     # return jsonify({'message': 'Resume generated successfully'})
 
