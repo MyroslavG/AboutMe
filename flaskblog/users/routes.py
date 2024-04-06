@@ -122,7 +122,8 @@ def generate_resume(user_id):
         aws_access_key_id=AWS_ACCESS_KEY,
         aws_secret_access_key=AWS_SECRET_KEY)
     pdf_key = f'resume{user.id}.pdf'
-    s3.upload_fileobj(pdf_buffer, 'iamqr-pdfs', pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
+    bucket_name = 'iamqr-pdfs'
+    s3.upload_fileobj(pdf_buffer, bucket_name, pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
 
     pdf_url = f'https://{bucket_name}.s3.amazonaws.com/{pdf_key}'
 
