@@ -86,13 +86,15 @@ def generate_resume(user_id):
 
     chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
 
-    response = openai.Completion.create(
-      engine="text-davinci-003", 
-      prompt=chatgpt_prompt,
-      temperature=0.7,
-      max_tokens=2048
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",  # Adjust the model as needed
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": prompt}
+        ]
     )
-    resume_text = response.choices[0].text.strip()
+    
+    resume_text = response['choices'][0]['message']['content'].strip()
 
     pdf_buffer = io.BytesIO()
     c = canvas.Canvas(pdf_buffer, pagesize=letter)
