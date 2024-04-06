@@ -10,13 +10,14 @@ from sqlalchemy import and_
 from flask_jwt_extended import create_access_token
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
-import openai
+from openai import OpenAI
 import io
 import os
 
 users = Blueprint('users', __name__)
 
-openai.api_key = os.getenv('OPENAI_SECRET')
+client = OpenAI()
+OpenAI.api_key = os.getenv('OPENAI_SECRET')
 
 @users.route("/register", methods=['POST'])    
 def register():
@@ -86,7 +87,7 @@ def generate_resume(user_id):
 
     chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
 
-    response = openai.ChatCompletion.create(
+    response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Adjust the model as needed
         messages=[
             {"role": "system", "content": "You are a helpful assistant."},
@@ -94,7 +95,7 @@ def generate_resume(user_id):
         ]
     )
     
-    resume_text = response['choices'][0]['message']['content'].strip()
+    resume_text = response.choices[0].message.content
 
     pdf_buffer = io.BytesIO()
     c = canvas.Canvas(pdf_buffer, pagesize=letter)
