@@ -96,7 +96,7 @@ def resume(user_id):
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
     
-@users.route("/generate_resume/<int:user_id>", methods=['GET'])
+@users.route("/generate_resume/<int:user_id>", methods=['GET', 'POST'])
 def generate_resume(user_id):
     user = User.query.get_or_404(user_id)
     user_posts = Post.query.filter_by(author=user).all()
@@ -137,6 +137,8 @@ def generate_resume(user_id):
     s3.upload_fileobj(pdf_buffer, bucket_name, pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
 
     pdf_url = f'https://{bucket_name}.s3.amazonaws.com/{pdf_key}'
+    user.pdf_url = pdf_url
+    db.session.commit()
 
     return jsonify({'pdf_url': pdf_url})
     
