@@ -86,6 +86,7 @@ def generate_resume(user_id):
     user_posts = Post.query.filter_by(author=user).all()
 
     chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
+    print(chatgpt_prompt)
 
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Adjust the model as needed
