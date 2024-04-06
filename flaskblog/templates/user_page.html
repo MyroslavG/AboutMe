@@ -58,6 +58,9 @@
         <div class="pdf-container">
             {% if pdf_url %}
                 <embed src="{{ pdf_url }}" type="application/pdf" width="100%" height="600px" />
+            {% else %}
+                <p>No resume available</p>
+            {% endif %}
         </div>
 
         <h2>Items</h2>
