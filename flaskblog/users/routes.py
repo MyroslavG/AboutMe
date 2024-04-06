@@ -65,7 +65,11 @@ def users_page(user_id):
     if not user:
         abort(404)  # Return a 404 Not Found if the user doesn't exist
     posts = Post.query.filter_by(author=user).all()
-    return render_template('user_page.html', user=user, posts=posts)
+    if user.pdf_url:
+        pdf_url = user.pdf_url
+    else:
+        pdf_url = None
+    return render_template('user_page.html', user=user, posts=posts, pdf_url=pdf_url)
 
 @users.route("/phone/<int:user_id>", methods=['PUT'])
 def add_phone(user_id):
