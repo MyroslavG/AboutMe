@@ -17,7 +17,7 @@ import os
 users = Blueprint('users', __name__)
 
 client = OpenAI()
-OpenAI.api_key = os.getenv('OPENAI_SECRET')
+OpenAI.api_key = os.getenv('OPENAI_API_KEY')
 
 @users.route("/register", methods=['POST'])    
 def register():
