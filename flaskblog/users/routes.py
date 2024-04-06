@@ -117,7 +117,7 @@ def generate_resume(user_id):
 
     s3 = boto3.client('s3')
     pdf_key = f'resume{user.id}.pdf'
-    s3.upload_fileobj(pdf_buffer, S3_BUCKET_NAME, pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
+    s3.upload_fileobj(pdf_buffer, 'iamqr-pdfs', pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
 
     pdf_url = f'https://{bucket_name}.s3.amazonaws.com/{pdf_key}'
 
