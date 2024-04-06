@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Page</title>
+    <title>{{ user.username }} page</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -67,7 +67,7 @@
 
         <div class="pdf-container">
             {% if pdf_url %}
-                <iframe src="{{ pdf_url }}" type="application/pdf" width="100%" height="100%" >
+                <embed src="{{ pdf_url }}" type="application/pdf" width="100%" height="100%" />
                 <a href="{{ pdf_url }}" download="User_Resume{{ user.username }}.pdf" class="download-btn">Download resume</a>
             {% else %}
                 <p>No resume available</p>
