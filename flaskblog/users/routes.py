@@ -82,6 +82,17 @@ def add_phone(user_id):
     else:
         return jsonify({'message': "User with this id doesn't exist"}), 404
 
+@users.route("/resume/<int:user_id>", methods=['GET'])
+def resume(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        abort(404)
+    else:
+        if user.pdf_url:
+            return jsonify({'pdf_url': user.pdf_url}), 200
+        else:
+            return jsonify({'message': 'No resume found'}), 404
+
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
     
