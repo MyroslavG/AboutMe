@@ -112,7 +112,7 @@ def generate_resume(user_id):
     
     pdf_buffer.seek(0)
     
-    return send_file(pdf_buffer, as_attachment=True, attachment_filename='resume.pdf')
+    return send_file(pdf_buffer, as_attachment=True, download_name='resume.pdf')
 
     # return jsonify({'message': 'Resume generated successfully'})
 
