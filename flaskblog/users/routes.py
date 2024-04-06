@@ -81,6 +81,9 @@ def add_phone(user_id):
         return jsonify({'message': 'Phone number is missing'}), 400
     else:
         return jsonify({'message': "User with this id doesn't exist"}), 404
+
+AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
+AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
     
 @users.route("/generate_resume/<int:user_id>", methods=['GET'])
 def generate_resume(user_id):
@@ -115,7 +118,9 @@ def generate_resume(user_id):
     
     pdf_buffer.seek(0)
 
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3',
+        aws_access_key_id=AWS_ACCESS_KEY,
+        aws_secret_access_key=AWS_SECRET_KEY)
     pdf_key = f'resume{user.id}.pdf'
     s3.upload_fileobj(pdf_buffer, 'iamqr-pdfs', pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
 
