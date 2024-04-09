@@ -144,7 +144,7 @@ def generate_resume(user_id):
     user.pdf_url = pdf_url
     db.session.commit()
 
-    return jsonify({'pdf_url': user.pdf_url})
+    return jsonify({'pdf_url': pdf_url})
     
     # return send_file(pdf_buffer, as_attachment=True, download_name='resume.pdf')
 
