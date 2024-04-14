@@ -72,7 +72,7 @@ def users_page(user_id):
     return render_template('user_page.html', user=user, posts=posts, pdf_url=pdf_url)
 
 @users.route("/generate_content/<int:user_id>", methods=['GET', 'POST'])
-def generate_content(user_id, prompt):
+def generate_content(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
