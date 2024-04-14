@@ -76,6 +76,8 @@ def generate_content(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
+        
+    data = request.json
     prompt = data.get('prompt')
 
     chatgpt_prompt = f'Create text snippet for a resume based on this info "{prompt}" without your comments, just pure text for the user'
