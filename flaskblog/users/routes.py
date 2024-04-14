@@ -71,6 +71,24 @@ def users_page(user_id):
         pdf_url = None
     return render_template('user_page.html', user=user, posts=posts, pdf_url=pdf_url)
 
+@users.route("/generate_content/<int:user_id>", methods=['GET', 'POST'])
+def generate_content(user_id, prompt):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    chatgpt_prompt = f'Create text snippet for a resume based on this info "{prompt}" without your comments, just pure text for the user'
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",  # Adjust the model as needed
+        messages=[
+            {"role": "system", "content": "You are a helpful assistant."},
+            {"role": "user", "content": chatgpt_prompt}
+        ]
+    )
+
+    content_text = response.choices[0].message.content
+    return jsonify({'content_text': content_text})
+
 @users.route("/phone/<int:user_id>", methods=['PUT'])
 def add_phone(user_id):
     data = request.json
