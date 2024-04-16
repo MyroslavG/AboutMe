@@ -102,7 +102,7 @@ def user_accounts(user_id):
 
     return jsonify({'accounts': accounts})
 
-@users.route("/accounts/<int:account_id>", methods=['GET'])
+@users.route("/account/<int:account_id>", methods=['GET'])
 def account(account_id):
     account = Account.query.get(account_id)
     if not account:
