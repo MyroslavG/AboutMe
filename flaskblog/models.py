@@ -31,6 +31,12 @@ class Account(db.Model):
     def __repr__(self):
         return f"Account('{self.name}', '{self.created_on}')"
 
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+        }
+
 class Post(db.Model):      
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(100), nullable = False)

@@ -97,7 +97,7 @@ def user_accounts(user_id):
     user = User.query.get(user_id)
     if not user:
         return jsonify({'message': 'User not found'}), 404
-    accounts = user.accounts
+    accounts = [account.to_dict() for account in user.accounts]
 
     return jsonify({'accounts': accounts})
 
