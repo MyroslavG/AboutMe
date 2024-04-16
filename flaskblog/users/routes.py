@@ -114,7 +114,7 @@ def add_account(user_id):
         account = Account(name=name, user_id=user.id)
         db.session.add(account)
         db.session.commit()
-        return jsonify({'message': 'Account added successfully'}), 200
+        return jsonify({'message': 'Account added successfully', 'id': account.id, 'name': account.name}), 200
     else:
         return jsonify({'message': 'Account name is required'}), 400
 
