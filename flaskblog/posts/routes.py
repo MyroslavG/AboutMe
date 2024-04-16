@@ -88,13 +88,14 @@ def delete_post(post_id):
 @posts.route("/posts/<int:account_id>", methods=['GET'])
 def account_posts(account_id):
     account = Account.query.get_or_404(account_id)
-    posts = Post.query.filter_by(author=account).order_by(Post.date_posted.desc()).all()
+    posts = Post.query.filter_by(account=account).order_by(Post.date_posted.desc()).all()
 
     posts_data = [{
         'id': post.id,
         'title': post.title,
         'content': post.content,
         'date_posted': post.date_posted.isoformat(),
+        'account_id': post.account_id,
         # Add any other necessary post fields here
     } for post in posts]
 
