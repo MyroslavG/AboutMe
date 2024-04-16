@@ -68,7 +68,7 @@ def users_page(account_id):
 
     if not account:
         abort(404)  # Return a 404 Not Found if the account doesn't exist
-    posts = Post.query.filter_by(account=account).all()
+    posts = Post.query.filter_by(account=account).order_by(Post.date_posted.desc()).all()
     if account.pdf_url:
         pdf_url = account.pdf_url
     else:
