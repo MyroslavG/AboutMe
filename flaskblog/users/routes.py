@@ -38,7 +38,7 @@ def register():
     db.session.add(account)
     db.session.commit()
     # login_user(user, remember=True)
-    return jsonify({'message': 'Account created successfully', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 201
+    return jsonify({'message': 'Account created successfully', 'access_token': access_token, 'username': user.username, 'user_id': user.id, 'account': account.id}), 201
 
 @users.route("/login", methods=['POST'])    
 def login():
@@ -55,7 +55,8 @@ def login():
     # if user and bcrypt.check_password_hash(user.password, password):
         # login_user(user, remember=True)
         access_token = create_access_token(identity=email)
-        return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username, 'user_id': user.id, 'phone': user.phone}), 200
+        account = Account.query.filter_by(user_id=user.id).first()
+        return jsonify({'message': 'Login successful', 'access_token': access_token, 'username': user.username, 'user_id': user.id, 'phone': user.phone, 'account': account.id}), 200
     else:    
         return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
 
@@ -100,6 +101,14 @@ def user_accounts(user_id):
     accounts = [account.to_dict() for account in user.accounts]
 
     return jsonify({'accounts': accounts})
+
+@users.route("/accounts/<int:account_id>", methods=['GET'])
+def account(account_id):
+    account = Account.query.get(account_id)
+    if not account:
+        return jsonify({'message': 'Account not found'}), 404
+
+    return jsonify(account.to_dict())
 
 @users.route('/accounts/create/<int:user_id>', methods=['GET', 'POST'])
 def add_account(user_id):
