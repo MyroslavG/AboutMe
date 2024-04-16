@@ -3,7 +3,6 @@ from flask import (render_template, url_for, flash,
 from flask_login import current_user, login_required
 from flaskblog import db
 from flaskblog.models import User, Post
-from flaskblog.posts.forms import PostForm, CommentForm
 import urllib.parse
 from sqlalchemy import func, desc
 from werkzeug.utils import secure_filename

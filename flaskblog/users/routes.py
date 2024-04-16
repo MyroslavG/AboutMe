@@ -1,9 +1,7 @@
 from flask import render_template, url_for, flash, redirect, request, Blueprint, jsonify, send_file
 from flask_login import login_user, current_user, logout_user, login_required
 from flaskblog import db, bcrypt
-from flaskblog.models import User, Post
-from flaskblog.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
-                                   RequestResetForm, ResetPasswordForm, SearchForm)
+from flaskblog.models import User, Post, Account
 from flaskblog.users.utils import save_picture, send_reset_email
 from flask_wtf.csrf import generate_csrf
 from sqlalchemy import and_
@@ -36,6 +34,8 @@ def register():
     user = User(username=username, email=email, password=password)
     access_token = create_access_token(identity=email)
     db.session.add(user)
+    account = Account(name='Personal account', user_id=user.id)
+    db.session.add(account)
     db.session.commit()
     # login_user(user, remember=True)
     return jsonify({'message': 'Account created successfully', 'access_token': access_token, 'username': user.username, 'user_id': user.id}), 201
@@ -91,6 +91,32 @@ def generate_content(user_id):
 
     content_text = response.choices[0].message.content
     return jsonify({'content_text': content_text})
+
+@users.route("/accounts/<int:user_id>", methods=['GET'])
+def user_accounts(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+    accounts = user.accounts
+
+    return jsonify({'accounts': accounts})
+
+@users.route('/accounts/<int:user_id>/create', methods=['GET', 'POST'])
+def add_account(user_id):
+    user = User.query.get(user_id)
+    if not user:
+        return jsonify({'message': 'User not found'}), 404
+
+    data = request.json
+    name = data.get('name')
+
+    if name:
+        account = Account(name=name, user_id=user.id)
+        user.accounts.append(account)
+        db.session.commit()
+        return jsonify({'message': 'Account added successfully'}), 200
+    else:
+        return jsonify({'message': 'Account name is required'}), 400
 
 @users.route("/phone/<int:user_id>", methods=['PUT'])
 def add_phone(user_id):
