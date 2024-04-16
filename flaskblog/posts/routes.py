@@ -19,8 +19,10 @@ posts = Blueprint('posts', __name__)
 
 @posts.route("/post/<int:account_id>", methods=['POST'])
 # @login_required
-def new_post(user_id, account_id):
+def new_post(account_id):
     data = request.get_json()  # This ensures you get the JSON data as a dictionary
+    account = Account.query.get(account_id)
+    user_id = account.user_id
 
     if not data:
         return jsonify({'message': 'No JSON data provided'}), 400
