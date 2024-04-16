@@ -17,9 +17,9 @@ from flask import jsonify
 
 posts = Blueprint('posts', __name__)
 
-@posts.route("/post/<int:user_id>", methods=['POST'])
+@posts.route("/post/<int:account_id>", methods=['POST'])
 # @login_required
-def new_post(user_id):
+def new_post(user_id, account_id):
     data = request.get_json()  # This ensures you get the JSON data as a dictionary
 
     if not data:
@@ -31,7 +31,7 @@ def new_post(user_id):
     if not title or not content:
         return jsonify({'message': 'Missing title or content'}), 400
 
-    post = Post(title=title, content=content, user_id=user_id)
+    post = Post(title=title, content=content, user_id=user_id, account_id=account_id)
     db.session.add(post)
     db.session.commit()
 
@@ -83,32 +83,10 @@ def delete_post(post_id):
 
     return jsonify({'message': 'Your post has been deleted'}), 200
 
-# @posts.route("/posts/<int:user_id>", methods=['GET'])
-# def user_posts(user_id):
-#     user = User.query.get_or_404(user_id)
-#     page = request.args.get('page', 1, type=int)
-#     posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc())
-
-#     # Convert posts and pagination data to JSON serializable format
-#     posts_data = [{
-#         'id': post.id,
-#         'title': post.title,
-#         'content': post.content,
-#         'date_posted': post.date_posted.isoformat(),
-#         # Add any other necessary post fields here
-#     } for post in posts.items]
-
-#     return jsonify({
-#         'posts': posts_data,
-#         'total_pages': posts.pages,
-#         'current_page': posts.page
-#     })
-
-
-@posts.route("/posts/<int:user_id>", methods=['GET'])
-def user_posts(user_id):
-    user = User.query.get_or_404(user_id)
-    posts = Post.query.filter_by(author=user).order_by(Post.date_posted.desc()).all()
+@posts.route("/posts/<int:account_id>", methods=['GET'])
+def account_posts(account_id):
+    account = Account.query.get_or_404(account_id)
+    posts = Post.query.filter_by(author=account).order_by(Post.date_posted.desc()).all()
 
     posts_data = [{
         'id': post.id,
@@ -119,9 +97,6 @@ def user_posts(user_id):
     } for post in posts]
 
     return jsonify({'posts': posts_data})
-
-
-
 
 
 # @posts.route("/post/<int:post_id>", methods=['GET', 'POST'])  
