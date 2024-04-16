@@ -101,7 +101,7 @@ def user_accounts(user_id):
 
     return jsonify({'accounts': accounts})
 
-@users.route('/accounts/<int:user_id>/create', methods=['GET', 'POST'])
+@users.route('/accounts/create/<int:user_id>', methods=['GET', 'POST'])
 def add_account(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -112,7 +112,7 @@ def add_account(user_id):
 
     if name:
         account = Account(name=name, user_id=user.id)
-        user.accounts.append(account)
+        db.session.add(account)
         db.session.commit()
         return jsonify({'message': 'Account added successfully'}), 200
     else:
