@@ -60,17 +60,20 @@ def login():
     else:    
         return jsonify({'message': 'Login unsuccessful. Please check email and password'}), 401
 
-@users.route("/page/<int:user_id>", methods=['GET'])
-def users_page(user_id):
+@users.route("/page/<int:account_id>", methods=['GET'])
+def users_page(account_id):
+    account = Account.query.get(account_id)
+    user_id = account.user_id
     user = User.query.get(user_id)
-    if not user:
-        abort(404)  # Return a 404 Not Found if the user doesn't exist
-    posts = Post.query.filter_by(author=user).all()
-    if user.pdf_url:
-        pdf_url = user.pdf_url
+
+    if not account:
+        abort(404)  # Return a 404 Not Found if the account doesn't exist
+    posts = Post.query.filter_by(account=account).all()
+    if account.pdf_url:
+        pdf_url = account.pdf_url
     else:
         pdf_url = None
-    return render_template('user_page.html', user=user, posts=posts, pdf_url=pdf_url)
+    return render_template('user_page.html', user=user, account=account, posts=posts, pdf_url=pdf_url)
 
 @users.route("/generate_content/<int:account_id>", methods=['GET', 'POST'])
 def generate_content(account_id):
