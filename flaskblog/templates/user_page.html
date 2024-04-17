@@ -62,20 +62,20 @@
     <div class="container">
         <div class="user-info">
             <h1>{{ user.username }}</h1>
-            <p>Email: {{ user.email }}</p>
+            <!-- <p>Email: {{ user.email }}</p> -->
             <p>Account: {{ account.name }}</p>
         </div>
 
-        <div class="pdf-container">
+        <!-- <div class="pdf-container">
             {% if pdf_url %}
                 <embed src="{{ pdf_url }}" type="application/pdf" width="100%" height="100%" />
                 <a href="{{ pdf_url }}" download="User_Resume{{ user.username }}.pdf" class="download-btn">Download resume</a>
             {% else %}
                 <p>No resume available</p>
             {% endif %}
-        </div>
+        </div> -->
 
-        <h2>Items</h2>
+        <!-- <h2>Items</h2> -->
         {% if posts %}
             <ul>
             {% for post in posts %}

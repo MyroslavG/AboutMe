@@ -77,9 +77,9 @@ def users_page(account_id):
 
 @users.route("/generate_content/<int:account_id>", methods=['GET', 'POST'])
 def generate_content(account_id):
-    user = User.query.get(account_id)
-    if not user:
-        return jsonify({'message': 'User not found'}), 404
+    account = Account.query.get(account_id)
+    if not account:
+        return jsonify({'message': 'Account not found'}), 404
         
     data = request.json
     prompt = data.get('prompt')
@@ -145,26 +145,26 @@ def add_phone(user_id):
     else:
         return jsonify({'message': "User with this id doesn't exist"}), 404
 
-@users.route("/resume/<int:user_id>", methods=['GET'])
-def resume(user_id):
-    user = User.query.get(user_id)
-    if not user:
+@users.route("/resume/<int:account_id>", methods=['GET'])
+def resume(account_id):
+    account = Account.query.get(account_id)
+    if not account:
         abort(404)
     else:
-        if user.pdf_url:
-            return jsonify({'pdf_url': user.pdf_url}), 200
+        if account.pdf_url:
+            return jsonify({'pdf_url': account.pdf_url}), 200
         else:
             return jsonify({'message': 'No resume found'}), 404
 
 AWS_ACCESS_KEY = os.getenv('AWS_ACCESS_KEY')
 AWS_SECRET_KEY = os.getenv('AWS_SECRET_KEY')
     
-@users.route("/generate_resume/<int:user_id>", methods=['GET', 'POST'])
-def generate_resume(user_id):
-    user = User.query.get_or_404(user_id)
-    user_posts = Post.query.filter_by(author=user).all()
+@users.route("/generate_resume/<int:account_id>", methods=['GET', 'POST'])
+def generate_resume(account_id):
+    account = Account.query.get_or_404(account_id)
+    account_posts = Post.query.filter_by(account=account).all()
 
-    chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in user_posts])
+    chatgpt_prompt = "Create text for a resume based on this info:\n" + "\n\n".join([f"Title: {post.title}\nContent: {post.content}" for post in account_posts])
     # print(chatgpt_prompt)
 
     response = client.chat.completions.create(
@@ -195,12 +195,12 @@ def generate_resume(user_id):
     s3 = boto3.client('s3',
         aws_access_key_id=AWS_ACCESS_KEY,
         aws_secret_access_key=AWS_SECRET_KEY)
-    pdf_key = f'resume{user.id}.pdf'
+    pdf_key = f'resume{account.id}.pdf'
     bucket_name = 'iamqr-pdfs'
     s3.upload_fileobj(pdf_buffer, bucket_name, pdf_key, ExtraArgs={'ContentType': 'application/pdf', 'ACL': 'public-read'})
 
     pdf_url = f'https://{bucket_name}.s3.amazonaws.com/{pdf_key}'
-    user.pdf_url = pdf_url
+    account.pdf_url = pdf_url
     db.session.commit()
 
     return jsonify({'pdf_url': pdf_url})
