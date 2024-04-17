@@ -34,6 +34,8 @@ def register():
     user = User(username=username, email=email, password=password)
     access_token = create_access_token(identity=email)
     db.session.add(user)
+    db.session.commit()
+    user = User.query.filter_by(email=email).first()
     account = Account(name='Personal page', user_id=user.id)
     db.session.add(account)
     db.session.commit()

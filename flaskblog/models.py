@@ -43,6 +43,7 @@ class Post(db.Model):
     date_posted = db.Column(db.DateTime, nullable = False, default = datetime.utcnow)
     media = db.Column(db.String(200))
     content = db.Column(db.Text, nullable = False)
+    # is_favourite = db.Column(db.Boolean, default = False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
     account_id = db.Column(db.Integer, db.ForeignKey('account.id'), nullable = False)
 
