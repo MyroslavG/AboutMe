@@ -48,7 +48,7 @@
         }
         .download-btn {
             display: inline-block;
-            margin-top: 20px;
+            margin-bottom: 10px;
             padding: 10px 20px;
             background-color: #000000;
             color: #ffffff;
@@ -63,7 +63,7 @@
         <div class="user-info">
             <h1>{{ user.username }}</h1>
             <!-- <p>Email: {{ user.email }}</p> -->
-            <p>Account: {{ account.name }}</p>
+            <p>Page: {{ account.name }}</p>
         </div>
 
         <!-- <div class="pdf-container">
@@ -86,10 +86,13 @@
                 </li>
             {% endfor %}
             </ul>
-        {% else %}
+        <!-- {% else %}
             <p>This user has no posts.</p>
-        {% endif %}
+        {% endif %} -->
     </div>
+    <footer style="margin-top: 20px; padding: 20px; background-color: #f4f4f4; text-align: center;">
+        <p><a href="https://amuservc.com/iamqr" class="download-btn">Powered by IAmQR</a></p>
+    </footer>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll('.post-content').forEach(function(node) {

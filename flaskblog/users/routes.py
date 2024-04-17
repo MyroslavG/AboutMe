@@ -34,7 +34,7 @@ def register():
     user = User(username=username, email=email, password=password)
     access_token = create_access_token(identity=email)
     db.session.add(user)
-    account = Account(name='Personal account', user_id=user.id)
+    account = Account(name='Personal page', user_id=user.id)
     db.session.add(account)
     db.session.commit()
     # login_user(user, remember=True)
@@ -84,7 +84,8 @@ def generate_content(account_id):
     data = request.json
     prompt = data.get('prompt')
 
-    chatgpt_prompt = f'Create text snippet for a resume based on this info "{prompt}" without your comments, just pure text for the user'
+    chatgpt_prompt = prompt
+    # chatgpt_prompt = f'Create text snippet for a resume based on this info "{prompt}" without your comments, just pure text for the user'
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",  # Adjust the model as needed
         messages=[
