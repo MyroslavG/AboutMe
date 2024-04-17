@@ -93,7 +93,45 @@
     <footer style="margin-top: 20px; padding: 20px; background-color: #f4f4f4; text-align: center;">
         <p><a href="https://amuservc.com/iamqr" class="download-btn">Powered by IAmQR</a></p>
     </footer>
+
     <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            document.querySelectorAll('.post-content').forEach(function(node) {
+                // Convert URLs to clickable links and handle newlines
+                let updatedHtml = node.textContent
+                    .replace(/(?:\r\n|\r|\n)/g, '<br>') // Replace newlines with <br>
+                    .replace(/(https?:\/\/[^\s]+)/g, function(url) { // Convert URLs to links
+                        return `<a href="${url}" target="_blank">Link</a>`;
+                    });
+        
+                // Handle potential list formatting
+                const lines = updatedHtml.split('<br>'); // Use <br> as splitter now
+                let newHtml = '';
+                let inList = false;
+                lines.forEach(line => {
+                    if (/^\d+\.\s/.test(line)) { // Detects numbers followed by a dot and space
+                        if (!inList) {
+                            newHtml += '<ol>'; // Start a new list
+                            inList = true;
+                        }
+                        newHtml += `<li>${line.replace(/^\d+\.\s/, '')}</li>`; // Add the list item without the number
+                    } else {
+                        if (inList) {
+                            newHtml += '</ol>'; // End the list
+                            inList = false;
+                        }
+                        newHtml += line; // Add the line of text
+                    }
+                });
+                if (inList) newHtml += '</ol>'; // Ensure closing tag if the text ends with a list
+        
+                // Update the innerHTML of the node with the formatted content
+                node.innerHTML = newHtml;
+            });
+        });
+    </script>        
+
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll('.post-content').forEach(function(node) {
                 const urlPattern = /(https?:\/\/[^\s]+)/g;
@@ -123,6 +161,6 @@
                 node.innerHTML = newHtml;
             });
         });
-    </script>
+    </script> -->
 </body>
 </html>
