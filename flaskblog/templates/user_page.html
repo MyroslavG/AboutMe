@@ -96,11 +96,31 @@
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             document.querySelectorAll('.post-content').forEach(function(node) {
-                // Simple URL detection pattern (improve as needed)
                 const urlPattern = /(https?:\/\/[^\s]+)/g;
                 node.innerHTML = node.textContent.replace(urlPattern, function(url) {
                     return `<a href="${url}" target="_blank">Link</a>`;
                 });
+
+                const lines = updatedHtml.split(/\n/);
+                let newHtml = '';
+                let inList = false;
+                lines.forEach(line => {
+                    if (/^\d+\.\s/.test(line)) {
+                        if (!inList) {
+                            newHtml += '<ol>';
+                            inList = true;
+                        }
+                        newHtml += `<li>${line.replace(/^\d+\.\s/, '')}</li>`;
+                    } else {
+                        if (inList) {
+                            newHtml += '</ol>';
+                            inList = false;
+                        }
+                        newHtml += line;
+                    }
+                });
+                if (inList) newHtml += '</ol>';
+                node.innerHTML = newHtml;
             });
         });
     </script>
